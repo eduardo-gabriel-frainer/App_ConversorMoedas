@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+    <title>Conversor Moedas</title>
+  </head>
+
+  <style>
+    body {
+      background: linear-gradient(to bottom, #007bff, rgb(1, 147, 187));
+      height: 100vh;
+      margin: 0;
+    }
+    
+    h1 {
+      margin-top: 50px;
+      margin-bottom: 20px;
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+    }
+    
+    .container {
+      display: flex;
+      gap: 20px; /* Menor espaço entre os containers */
+      justify-content: center;
+      text-align: center;
+      margin: 10px auto; /* Adicionando 'auto' para centralizar horizontalmente */
+      width: 60%; /* Diminuí a largura do container */
+      margin-top: 190px;
+    }
+    
+    .moedaBase,
+    .moedaAlvo {
+      position: relative;
+      font-family: Arial, sans-serif;
+      margin: 0; /* Removido a margem lateral */
+      width: 45%; /* Ajusta a largura para que fiquem mais próximos */
+    }
+    
+    select,
+    #moedaValor,
+    #resultado {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+      cursor: text;
+      box-sizing: border-box; /* Garante que o padding não afete a largura total */
+    }
+    
+    select {
+      border-radius: 20px 20px 0 0;
+      padding-left: 60px;
+    }
+    
+    select span {
+      color: aqua;
+    }
+    
+    #moedaValor,
+    #resultado {
+      border-radius: 0 0 20px 20px;
+    }
+    
+    select:focus,
+    #moedaValor:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+    
+    #moedaValor,
+    #resultado {
+      font-size: 25px;
+      margin-top: 0; /* Removendo a margem superior */
+      background-color: #fff;
+      height: 60px; /* Ajuste a altura para deixar mais consistente */
+      border-top: none; /* Remover a borda superior para uma transição suave */
+      text-align: left;
+    }
+    
+    select:focus,
+    #moedaValor:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+    
+    .button-container {
+      display: flex;
+      justify-content: center;
+    }
+    
+    button {
+      padding: 12px;
+      border-radius: 8px;
+      background-color: rgb(255, 255, 255);
+      margin-top: 30px;
+      width: 190px;
+      font-size: 15px;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    #text-area {
+      position: absolute;
+      top: 150px; /* Ajuste conforme necessário */
+      left: 50%; /* Para centralizar horizontalmente */
+      transform: translateX(-50%); /* Para garantir que o elemento fique realmente centralizado */
+      text-align: center;
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      font-size: 25px;
+      font-weight: bold;
+    }
+    
+    .texto-pequeno {
+      font-size: 14px; /* Tamanho menor para a parte superior */
+      font-weight: normal;
+      margin-bottom: 10px;
+    }
+    .texto-grande {
+      font-size: 30px; /* Tamanho maior para a parte inferior */
+      font-weight: bold;
+    }
+    
+    .moedaBase {
+      position: relative;
+    }
+    
+    .bandeira-container {
+      position: absolute;
+      left: 12px; /* Ajuste conforme necessário */
+      top: 23%;
+      transform: translateY(-50%);
+      pointer-events: none; /* Evita que a bandeira interfira no clique do select */
+    }
+    
+    #bandeiraBase,
+    #bandeiraAlvo {
+      width: 35px;
+      height: 23px;
+      border-radius: 4px;
+    }
+    
+    select {
+      padding-left: 50px; /* Espaço para a bandeira */
+    }
+  </style>
+  <body>
+    <h1>Bem vindo ao conversor de Moedas</h1>
+
+    <div id="text-area"></div>
+    <form id="conversorForm">
+      <div class="container">
+        <div class="moedaBase">
+          <div class="bandeira-container">
+            <img id="bandeiraBase" src="https://flagcdn.com/w40/us.png" />
+          </div>
+          <select id="base" onchange="atualizarBandeira('base', 'bandeiraBase')">
+            <option value="USD">USD Dólar Americano</option>
+            <option value="AED">AED - Dirham dos Emirados Árabes Unidos</option>
+            <option value="AFN">AFN - Afegane</option>
+            <option value="ALL">ALL - Lek Albanês</option>
+            <option value="AMD">AMD - Dram Armênio</option>
+            <option value="ANG">ANG - Florim das Antilhas Neerlandesas</option>
+            <option value="AOA">AOA - Kwanza Angolano</option>
+            <option value="ARS">ARS - Peso Argentino</option>
+            <option value="AUD">AUD - Dólar Australiano</option>
+            <option value="AWG">AWG - Florim de Aruba</option>
+            <option value="AZN">AZN - Manat do Azerbaijão</option>
+            <option value="BAM">BAM - Marco Conversível Bósnio</option>
+            <option value="BBD">BBD - Dólar Barbadian</option>
+            <option value="BDT">BDT - Taka de Bangladesh</option>
+            <option value="BGN">BGN - Lev Búlgaro</option>
+            <option value="BHD">BHD - Dinar Bahreinita</option>
+            <option value="BIF">BIF - Franco Burundiano</option>
+            <option value="BMD">BMD - Dólar das Bermudas</option>
+            <option value="BND">BND - Dólar Bruneano</option>
+            <option value="BOB">BOB - Boliviano</option>
+            <option value="BRL">BRL - Real Brasileiro</option>
+            <option value="BSD">BSD - Dólar das Bahamas</option>
+            <option value="BTN">BTN - Ngultrum Butanês</option>
+            <option value="BWP">BWP - Pula Botsuanense</option>
+            <option value="BYN">BYN - Rublo Bielorrusso</option>
+            <option value="BZD">BZD - Dólar de Belize</option>
+            <option value="CAD">CAD - Dólar Canadense</option>
+            <option value="CDF">CDF - Franco Congolês</option>
+            <option value="CHF">CHF - Franco Suíço</option>
+            <option value="CLP">CLP - Peso Chileno</option>
+            <option value="CNY">CNY - Yuan Chinês</option>
+            <option value="COP">COP - Peso Colombiano</option>
+            <option value="CRC">CRC - Colón Costarriquenho</option>
+            <option value="CUP">CUP - Peso Cubano</option>
+            <option value="CVE">CVE - Escudo de Cabo Verde</option>
+            <option value="CZK">CZK - Coroa Checa</option>
+            <option value="DJF">DJF - Franco Djibutiano</option>
+            <option value="DKK">DKK - Coroa Dinamarquesa</option>
+            <option value="DOP">DOP - Peso Dominicano</option>
+            <option value="DZD">DZD - Dinar Argelino</option>
+            <option value="EGP">EGP - Libra Egípcia</option>
+            <option value="ERN">ERN - Nakfa Eritreu</option>
+            <option value="ETB">ETB - Birr Etíope</option>
+            <option value="EUR">EUR - Euro</option>
+            <option value="FJD">FJD - Dólar Fiji</option>
+            <option value="FKP">FKP - Libra das Ilhas Malvinas</option>
+            <option value="FOK">FOK - Coroa das Ilhas Feroé</option>
+            <option value="GBP">GBP - Libra Esterlina</option>
+            <option value="GEL">GEL - Lari Georgiano</option>
+            <option value="GGP">GGP - Libra de Guernsey</option>
+            <option value="GHS">GHS - Cedi Ganês</option>
+            <option value="GIP">GIP - Libra de Gibraltar</option>
+            <option value="GMD">GMD - Dalasi Gambiano</option>
+            <option value="GNF">GNF - Franco Guineano</option>
+            <option value="GTQ">GTQ - Quetzal Guatemalteco</option>
+            <option value="GYD">GYD - Dólar Guyanense</option>
+            <option value="HKD">HKD - Dólar de Hong Kong</option>
+            <option value="HNL">HNL - Lempira Hondurenha</option>
+            <option value="HRK">HRK - Kuna Croata</option>
+            <option value="HTG">HTG - Gourde Haitiano</option>
+            <option value="HUF">HUF - Forint Húngaro</option>
+            <option value="IDR">IDR - Rupia Indonésia</option>
+            <option value="ILS">ILS - Novo Shekel Israelense</option>
+            <option value="IMP">IMP - Libra de Ilha de Man</option>
+            <option value="INR">INR - Rúpia Indiana</option>
+            <option value="IQD">IQD - Dinar Iraquiano</option>
+            <option value="IRR">IRR - Rial Iraniano</option>
+            <option value="ISK">ISK - Coroa Islandesa</option>
+            <option value="JEP">JEP - Libra de Jersey</option>
+            <option value="JMD">JMD - Dólar Jamaicano</option>
+            <option value="JOD">JOD - Dinar Jordaniano</option>
+            <option value="JPY">JPY - Iene Japonês</option>
+            <option value="KES">KES - Xelim Queniano</option>
+            <option value="KGS">KGS - Som Quirguiz</option>
+            <option value="KHR">KHR - Riel Cambojano</option>
+            <option value="KID">KID - Dólar de Kiribati</option>
+            <option value="KMF">KMF - Franco Comoriano</option>
+            <option value="KRW">KRW - Won Sul-Coreano</option>
+            <option value="KWD">KWD - Dinar Kuaitiano</option>
+            <option value="KYD">KYD - Dólar das Ilhas Cayman</option>
+            <option value="KZT">KZT - Tenge Cazaque</option>
+            <option value="LAK">LAK - Kip Laociano</option>
+            <option value="LBP">LBP - Libra Libanesa</option>
+            <option value="LKR">LKR - Rúpia do Sri Lanka</option>
+            <option value="LRD">LRD - Dólar Liberiano</option>
+            <option value="LSL">LSL - Loti Lesotiano</option>
+            <option value="LYD">LYD - Dinar Líbio</option>
+            <option value="MAD">MAD - Dirham Marroquino</option>
+            <option value="MDL">MDL - Leu Moldavo</option>
+            <option value="MGA">MGA - Ariary Malgaxe</option>
+            <option value="MKD">MKD - Denar Macedônio</option>
+            <option value="MMK">MMK - Kyat Birmanês</option>
+            <option value="MNT">MNT - Tugrik Mongol</option>
+            <option value="MOP">MOP - Pataca Macaense</option>
+            <option value="MRU">MRU - Ouguiya Mauritano</option>
+            <option value="MUR">MUR - Rúpia Mauriciana</option>
+            <option value="MVR">MVR - Rúpia Maldiva</option>
+            <option value="MWK">MWK - Kwacha Malawiana</option>
+            <option value="MXN">MXN - Peso Mexicano</option>
+            <option value="MYR">MYR - Ringgit Malaio</option>
+            <option value="MZN">MZN - Metical Moçambicano</option>
+            <option value="NAD">NAD - Dólar da Namíbia</option>
+            <option value="NGN">NGN - Naira Nigeriana</option>
+            <option value="NIO">NIO - Córdobas Nicaraguenses</option>
+            <option value="NOK">NOK - Coroa Norueguesa</option>
+            <option value="NPR">NPR - Rúpia Nepalense</option>
+            <option value="NZD">NZD - Dólar Neozelandês</option>
+            <option value="OMR">OMR - Rial Omanense</option>
+            <option value="PAB">PAB - Balboa Panamenho</option>
+            <option value="PEN">PEN - Sol Peruano</option>
+            <option value="PGK">PGK - Kina Papua-Nova Guiné</option>
+            <option value="PHP">PHP - Peso Filipino</option>
+            <option value="PKR">PKR - Rúpia Paquistanesa</option>
+            <option value="PLN">PLN - Zloty Polonês</option>
+            <option value="PYG">PYG - Guarani Paraguaio</option>
+            <option value="QAR">QAR - Rial Catariano</option>
+            <option value="RON">RON - Leu Romeno</option>
+            <option value="RSD">RSD - Dinar Servo</option>
+            <option value="RUB">RUB - Rublo Russo</option>
+            <option value="RWF">RWF - Franco Ruandês</option>
+            <option value="SAR">SAR - Rial Saudita</option>
+            <option value="SBD">SBD - Dólar das Ilhas Salomão</option>
+            <option value="SCR">SCR - Rúpia de Seychelles</option>
+            <option value="SDG">SDG - Libra Sudanesa</option>
+            <option value="SEK">SEK - Coroa Sueca</option>
+            <option value="SGD">SGD - Dólar de Singapura</option>
+            <option value="SHP">SHP - Libra de Santa Helena</option>
+            <option value="SLE">SLE - Leone de Serra Leoa</option>
+            <option value="SLL">SLL - Leone Sierra-Leonense</option>
+            <option value="SOS">SOS - Xelim Somali</option>
+            <option value="SRD">SRD - Dólar Surinamês</option>
+            <option value="SSP">SSP - Libra Sul-Sudanesa</option>
+            <option value="STN">STN - Dobra de São Tomé e Príncipe</option>
+            <option value="SYP">SYP - Libra Síria</option>
+            <option value="SZL">SZL - Lilangeni Suázi</option>
+            <option value="THB">THB - Baht Tailandês</option>
+            <option value="TJS">TJS - Somoni Tajique</option>
+            <option value="TMT">TMT - Manat Turcomeno</option>
+            <option value="TND">TND - Dinar Tunisiano</option>
+            <option value="TOP">TOP - Paʻanga de Tonga</option>
+            <option value="TRY">TRY - Lira Turca</option>
+            <option value="TTD">TTD - Dólar de Trinidad e Tobago</option>
+            <option value="TVD">TVD - Dólar Tuvaluano</option>
+            <option value="TWD">TWD - Novo Dólar de Taiwan</option>
+            <option value="TZS">TZS - Xelim Tanzaniano</option>
+            <option value="UAH">UAH - Grívnia Ucraniana</option>
+            <option value="UGX">UGX - Xelim Ugandense</option>
+            <option value="UYU">UYU - Peso Uruguaio</option>
+            <option value="UZS">UZS - Som Uzbeque</option>
+            <option value="VES">VES - Bolívar Venezuelano</option>
+            <option value="VND">VND - Dong Vietnamita</option>
+            <option value="VUV">VUV - Vatu Vanuatuano</option>
+            <option value="WST">WST - Tala Samoa</option>
+            <option value="XAF">XAF - Franco CFA da África Central</option>
+            <option value="XCD">XCD - Dólar do Caribe Oriental</option>
+            <option value="XOF">XOF - Franco CFA da África Ocidental</option>
+            <option value="YER">YER - Rial Yemenita</option>
+            <option value="ZAR">ZAR - Rand Sul-Africano</option>
+            <option value="ZMW">ZMW - Kwacha Zambiano</option>
+          </select>
+
+          <input id="moedaValor" type="text" placeholder="0.00" value="1.00" />
+        </div>
+
+        <div class="moedaAlvo">
+          <div class="bandeira-container">
+            <img id="bandeiraAlvo" src="https://flagcdn.com/w40/us.png" />
+          </div>
+          <select id="alvo" onchange="atualizarBandeira('alvo', 'bandeiraAlvo')">
+            <option value="USD">USD - Dólar Americano</option>
+            <option value="AED">AED - Dirham dos Emirados Árabes Unidos</option>
+            <option value="AFN">AFN - Afegane</option>
+            <option value="ALL">ALL - Lek Albanês</option>
+            <option value="AMD">AMD - Dram Armênio</option>
+            <option value="ANG">ANG - Florim das Antilhas Neerlandesas</option>
+            <option value="AOA">AOA - Kwanza Angolano</option>
+            <option value="ARS">ARS - Peso Argentino</option>
+            <option value="AUD">AUD - Dólar Australiano</option>
+            <option value="AWG">AWG - Florim de Aruba</option>
+            <option value="AZN">AZN - Manat do Azerbaijão</option>
+            <option value="BAM">BAM - Marco Conversível Bósnio</option>
+            <option value="BBD">BBD - Dólar Barbadian</option>
+            <option value="BDT">BDT - Taka de Bangladesh</option>
+            <option value="BGN">BGN - Lev Búlgaro</option>
+            <option value="BHD">BHD - Dinar Bahreinita</option>
+            <option value="BIF">BIF - Franco Burundiano</option>
+            <option value="BMD">BMD - Dólar das Bermudas</option>
+            <option value="BND">BND - Dólar Bruneano</option>
+            <option value="BOB">BOB - Boliviano</option>
+            <option value="BRL">BRL - Real Brasileiro</option>
+            <option value="BSD">BSD - Dólar das Bahamas</option>
+            <option value="BTN">BTN - Ngultrum Butanês</option>
+            <option value="BWP">BWP - Pula Botsuanense</option>
+            <option value="BYN">BYN - Rublo Bielorrusso</option>
+            <option value="BZD">BZD - Dólar de Belize</option>
+            <option value="CAD">CAD - Dólar Canadense</option>
+            <option value="CDF">CDF - Franco Congolês</option>
+            <option value="CHF">CHF - Franco Suíço</option>
+            <option value="CLP">CLP - Peso Chileno</option>
+            <option value="CNY">CNY - Yuan Chinês</option>
+            <option value="COP">COP - Peso Colombiano</option>
+            <option value="CRC">CRC - Colón Costarriquenho</option>
+            <option value="CUP">CUP - Peso Cubano</option>
+            <option value="CVE">CVE - Escudo de Cabo Verde</option>
+            <option value="CZK">CZK - Coroa Checa</option>
+            <option value="DJF">DJF - Franco Djibutiano</option>
+            <option value="DKK">DKK - Coroa Dinamarquesa</option>
+            <option value="DOP">DOP - Peso Dominicano</option>
+            <option value="DZD">DZD - Dinar Argelino</option>
+            <option value="EGP">EGP - Libra Egípcia</option>
+            <option value="ERN">ERN - Nakfa Eritreu</option>
+            <option value="ETB">ETB - Birr Etíope</option>
+            <option value="EUR">EUR - Euro</option>
+            <option value="FJD">FJD - Dólar Fiji</option>
+            <option value="FKP">FKP - Libra das Ilhas Malvinas</option>
+            <option value="FOK">FOK - Coroa das Ilhas Feroé</option>
+            <option value="GBP">GBP - Libra Esterlina</option>
+            <option value="GEL">GEL - Lari Georgiano</option>
+            <option value="GGP">GGP - Libra de Guernsey</option>
+            <option value="GHS">GHS - Cedi Ganês</option>
+            <option value="GIP">GIP - Libra de Gibraltar</option>
+            <option value="GMD">GMD - Dalasi Gambiano</option>
+            <option value="GNF">GNF - Franco Guineano</option>
+            <option value="GTQ">GTQ - Quetzal Guatemalteco</option>
+            <option value="GYD">GYD - Dólar Guyanense</option>
+            <option value="HKD">HKD - Dólar de Hong Kong</option>
+            <option value="HNL">HNL - Lempira Hondurenha</option>
+            <option value="HRK">HRK - Kuna Croata</option>
+            <option value="HTG">HTG - Gourde Haitiano</option>
+            <option value="HUF">HUF - Forint Húngaro</option>
+            <option value="IDR">IDR - Rupia Indonésia</option>
+            <option value="ILS">ILS - Novo Shekel Israelense</option>
+            <option value="IMP">IMP - Libra de Ilha de Man</option>
+            <option value="INR">INR - Rúpia Indiana</option>
+            <option value="IQD">IQD - Dinar Iraquiano</option>
+            <option value="IRR">IRR - Rial Iraniano</option>
+            <option value="ISK">ISK - Coroa Islandesa</option>
+            <option value="JEP">JEP - Libra de Jersey</option>
+            <option value="JMD">JMD - Dólar Jamaicano</option>
+            <option value="JOD">JOD - Dinar Jordaniano</option>
+            <option value="JPY">JPY - Iene Japonês</option>
+            <option value="KES">KES - Xelim Queniano</option>
+            <option value="KGS">KGS - Som Quirguiz</option>
+            <option value="KHR">KHR - Riel Cambojano</option>
+            <option value="KID">KID - Dólar de Kiribati</option>
+            <option value="KMF">KMF - Franco Comoriano</option>
+            <option value="KRW">KRW - Won Sul-Coreano</option>
+            <option value="KWD">KWD - Dinar Kuaitiano</option>
+            <option value="KYD">KYD - Dólar das Ilhas Cayman</option>
+            <option value="KZT">KZT - Tenge Cazaque</option>
+            <option value="LAK">LAK - Kip Laociano</option>
+            <option value="LBP">LBP - Libra Libanesa</option>
+            <option value="LKR">LKR - Rúpia do Sri Lanka</option>
+            <option value="LRD">LRD - Dólar Liberiano</option>
+            <option value="LSL">LSL - Loti Lesotiano</option>
+            <option value="LYD">LYD - Dinar Líbio</option>
+            <option value="MAD">MAD - Dirham Marroquino</option>
+            <option value="MDL">MDL - Leu Moldavo</option>
+            <option value="MGA">MGA - Ariary Malgaxe</option>
+            <option value="MKD">MKD - Denar Macedônio</option>
+            <option value="MMK">MMK - Kyat Birmanês</option>
+            <option value="MNT">MNT - Tugrik Mongol</option>
+            <option value="MOP">MOP - Pataca Macaense</option>
+            <option value="MRU">MRU - Ouguiya Mauritano</option>
+            <option value="MUR">MUR - Rúpia Mauriciana</option>
+            <option value="MVR">MVR - Rúpia Maldiva</option>
+            <option value="MWK">MWK - Kwacha Malawiana</option>
+            <option value="MXN">MXN - Peso Mexicano</option>
+            <option value="MYR">MYR - Ringgit Malaio</option>
+            <option value="MZN">MZN - Metical Moçambicano</option>
+            <option value="NAD">NAD - Dólar da Namíbia</option>
+            <option value="NGN">NGN - Naira Nigeriana</option>
+            <option value="NIO">NIO - Córdobas Nicaraguenses</option>
+            <option value="NOK">NOK - Coroa Norueguesa</option>
+            <option value="NPR">NPR - Rúpia Nepalense</option>
+            <option value="NZD">NZD - Dólar Neozelandês</option>
+            <option value="OMR">OMR - Rial Omanense</option>
+            <option value="PAB">PAB - Balboa Panamenho</option>
+            <option value="PEN">PEN - Sol Peruano</option>
+            <option value="PGK">PGK - Kina Papua-Nova Guiné</option>
+            <option value="PHP">PHP - Peso Filipino</option>
+            <option value="PKR">PKR - Rúpia Paquistanesa</option>
+            <option value="PLN">PLN - Zloty Polonês</option>
+            <option value="PYG">PYG - Guarani Paraguaio</option>
+            <option value="QAR">QAR - Rial Catariano</option>
+            <option value="RON">RON - Leu Romeno</option>
+            <option value="RSD">RSD - Dinar Servo</option>
+            <option value="RUB">RUB - Rublo Russo</option>
+            <option value="RWF">RWF - Franco Ruandês</option>
+            <option value="SAR">SAR - Rial Saudita</option>
+            <option value="SBD">SBD - Dólar das Ilhas Salomão</option>
+            <option value="SCR">SCR - Rúpia de Seychelles</option>
+            <option value="SDG">SDG - Libra Sudanesa</option>
+            <option value="SEK">SEK - Coroa Sueca</option>
+            <option value="SGD">SGD - Dólar de Singapura</option>
+            <option value="SHP">SHP - Libra de Santa Helena</option>
+            <option value="SLE">SLE - Leone de Serra Leoa</option>
+            <option value="SLL">SLL - Leone Sierra-Leonense</option>
+            <option value="SOS">SOS - Xelim Somali</option>
+            <option value="SRD">SRD - Dólar Surinamês</option>
+            <option value="SSP">SSP - Libra Sul-Sudanesa</option>
+            <option value="STN">STN - Dobra de São Tomé e Príncipe</option>
+            <option value="SYP">SYP - Libra Síria</option>
+            <option value="SZL">SZL - Lilangeni Suázi</option>
+            <option value="THB">THB - Baht Tailandês</option>
+            <option value="TJS">TJS - Somoni Tajique</option>
+            <option value="TMT">TMT - Manat Turcomeno</option>
+            <option value="TND">TND - Dinar Tunisiano</option>
+            <option value="TOP">TOP - Paʻanga de Tonga</option>
+            <option value="TRY">TRY - Lira Turca</option>
+            <option value="TTD">TTD - Dólar de Trinidad e Tobago</option>
+            <option value="TVD">TVD - Dólar Tuvaluano</option>
+            <option value="TWD">TWD - Novo Dólar de Taiwan</option>
+            <option value="TZS">TZS - Xelim Tanzaniano</option>
+            <option value="UAH">UAH - Grívnia Ucraniana</option>
+            <option value="UGX">UGX - Xelim Ugandense</option>
+            <option value="UYU">UYU - Peso Uruguaio</option>
+            <option value="UZS">UZS - Som Uzbeque</option>
+            <option value="VES">VES - Bolívar Venezuelano</option>
+            <option value="VND">VND - Dong Vietnamita</option>
+            <option value="VUV">VUV - Vatu Vanuatuano</option>
+            <option value="WST">WST - Tala Samoa</option>
+            <option value="XAF">XAF - Franco CFA da África Central</option>
+            <option value="XCD">XCD - Dólar do Caribe Oriental</option>
+            <option value="XOF">XOF - Franco CFA da África Ocidental</option>
+            <option value="YER">YER - Rial Yemenita</option>
+            <option value="ZAR">ZAR - Rand Sul-Africano</option>
+            <option value="ZMW">ZMW - Kwacha Zambiano</option>
+          </select>
+          <div id="resultado"></div>
+        </div>
+      </div>
+      <div class="button-container">
+        <button id="converter">Converter</button>
+      </div>
+    </form>
+
+    <script>
+      document.getElementById('conversorForm').addEventListener('submit', async function (event) {
+        event.preventDefault() // Impede o recarregamento da página
+      
+        const moedaBase = document.getElementById('base').value
+        const moedaAlvo = document.getElementById('alvo').value
+        const moedaValor = parseFloat(document.getElementById('moedaValor').value) // Converte para número
+      
+        console.log(`Base: ${moedaBase}, Alvo: ${moedaAlvo}, Valor: ${moedaValor}`)
+      
+        try {
+          const response = await fetch(`http://localhost:8080/conversao?moedaBase=${moedaBase}&moedaAlvo=${moedaAlvo}&moedaValor=${moedaValor}`)
+          const taxaTexto = await response.text() // Obtém a resposta como texto
+      
+          // Atualiza o HTML com o resultado da conversão
+          document.getElementById('text-area').innerHTML = taxaTexto
+      
+          const span = document.querySelector('#text-area span.texto-grande')
+          if (span) {
+            const taxa = parseFloat(span.innerText.trim()) // Pega a taxa e converte para número
+            //const valorConvertido = moedaValor * taxa // Multiplica pelo valor digitado
+      
+            document.getElementById('resultado').innerText = taxa.toFixed(2)
+          } else {
+            document.getElementById('resultado').innerText = 'Não foi possível encontrar o valor da conversão.'
+          }
+        } catch (error) {
+          console.error('Erro ao obter conversão:', error)
+          document.getElementById('resultado').innerText = 'Erro ao buscar a conversão.'
+        }
+      })
+      
+      // Mapeamento de moedas para bandeiras
+      const bandeiras = {
+        USD: 'us',
+        AED: 'ae',
+        AFN: 'af',
+        ALL: 'al',
+        AMD: 'am',
+        ANG: 'ao',
+        AOA: 'ao',
+        ARS: 'ar',
+        AUD: 'au',
+        AWG: 'aw',
+        AZN: 'az',
+        BAM: 'ba',
+        BBD: 'bb',
+        BDT: 'bd',
+        BGN: 'bg',
+        BHD: 'bh',
+        BIF: 'bi',
+        BMD: 'bm',
+        BND: 'bn',
+        BOB: 'bo',
+        BRL: 'br',
+        BSD: 'bs',
+        BTN: 'bt',
+        BWP: 'bw',
+        BYN: 'by',
+        BZD: 'bz',
+        CAD: 'ca',
+        CDF: 'cd',
+        CHF: 'ch',
+        CLP: 'cl',
+        CNY: 'cn',
+        COP: 'co',
+        CRC: 'cr',
+        CUP: 'cu',
+        CVE: 'cv',
+        CZK: 'cz',
+        DJF: 'dj',
+        DKK: 'dk',
+        DOP: 'do',
+        DZD: 'dz',
+        EGP: 'eg',
+        ERN: 'er',
+        ETB: 'et',
+        EUR: 'eu',
+        FJD: 'fj',
+        FKP: 'fk',
+        FOK: 'fo',
+        GBP: 'gb',
+        GEL: 'ge',
+        GGP: 'gg',
+        GHS: 'gh',
+        GIP: 'gi',
+        GMD: 'gm',
+        GNF: 'gn',
+        GTQ: 'gt',
+        GYD: 'gy',
+        HKD: 'hk',
+        HNL: 'hn',
+        HRK: 'hr',
+        HTG: 'ht',
+        HUF: 'hu',
+        IDR: 'id',
+        ILS: 'il',
+        IMP: 'im',
+        INR: 'in',
+        IQD: 'iq',
+        IRR: 'ir',
+        ISK: 'is',
+        JEP: 'je',
+        JMD: 'jm',
+        JOD: 'jo',
+        JPY: 'jp',
+        KES: 'ke',
+        KGS: 'kg',
+        KHR: 'kh',
+        KID: 'ki',
+        KMF: 'km',
+        KRW: 'kr',
+        KWD: 'kw',
+        KYD: 'ky',
+        KZT: 'kz',
+        LAK: 'la',
+        LBP: 'lb',
+        LKR: 'lk',
+        LRD: 'lr',
+        LSL: 'ls',
+        LYD: 'ly',
+        MAD: 'ma',
+        MDL: 'md',
+        MGA: 'mg',
+        MKD: 'mk',
+        MMK: 'mm',
+        MNT: 'mn',
+        MOP: 'mo',
+        MRU: 'mr',
+        MUR: 'mu',
+        MVR: 'mv',
+        MWK: 'mw',
+        MXN: 'mx',
+        MYR: 'my',
+        MZN: 'mz',
+        NAD: 'na',
+        NGN: 'ng',
+        NIO: 'ni',
+        NOK: 'no',
+        NPR: 'np',
+        NZD: 'nz',
+        OMR: 'om',
+        PAB: 'pa',
+        PEN: 'pe',
+        PGK: 'pg',
+        PHP: 'ph',
+        PKR: 'pk',
+        PLN: 'pl',
+        PYG: 'py',
+        QAR: 'qa',
+        RON: 'ro',
+        RSD: 'rs',
+        RUB: 'ru',
+        RWF: 'rw',
+        SAR: 'sa',
+        SBD: 'sb',
+        SCR: 'sc',
+        SDG: 'sd',
+        SEK: 'se',
+        SGD: 'sg',
+        SHP: 'sh',
+        SLE: 'sl',
+        SLL: 'sl',
+        SOS: 'so',
+        SRD: 'sr',
+        SSP: 'ss',
+        STN: 'st',
+        SYP: 'sy',
+        SZL: 'sz',
+        THB: 'th',
+        TJS: 'tj',
+        TMT: 'tm',
+        TND: 'tn',
+        TOP: 'to',
+        TRY: 'tr',
+        TTD: 'tt',
+        TVD: 'tv',
+        TWD: 'tw',
+        TZS: 'tz',
+        UAH: 'ua',
+        UGX: 'ug',
+        UYU: 'uy',
+        UZS: 'uz',
+        VES: 've',
+        VND: 'vn',
+        VUV: 'vu',
+        WST: 'ws',
+        XAF: 'cf', // África Central (Franco CFA)
+        XCD: 'ag', // Caribe Oriental (Antígua e Barbuda como referência)
+        XOF: 'bj', // África Ocidental (Benin como referência)
+        YER: 'ye',
+        ZAR: 'za',
+        ZMW: 'zm'
+      }
+      
+      function atualizarBandeira(selectId, imgId) {
+        const select = document.getElementById(selectId)
+        const bandeiraImg = document.getElementById(imgId)
+        const codigoMoeda = select.value
+      
+        if (bandeiras[codigoMoeda]) {
+          bandeiraImg.src = `https://flagcdn.com/w40/${bandeiras[codigoMoeda]}.png`
+        }
+      }
+    </script>
+  </body>
+</html>
