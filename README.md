@@ -16,9 +16,15 @@ Este é um conversor de moedas desenvolvido com Spring Boot, Java, HTML, CSS e J
 ## Imagens do Sistema
 
 ![image](https://github.com/user-attachments/assets/69666368-1d47-4dcb-8f4e-576f71d35e9a)
+<br>
+Organização do Código
 
 ![image](https://github.com/user-attachments/assets/eb7a351a-ab17-4ef1-8736-4fcfe25624b9)
+<br>
+Requisição a Api de conversão de moedas com o parâmetro da moeda base
 
 ![image](https://github.com/user-attachments/assets/2041a18c-a6bf-4d1a-90c2-0340df37ec0f)
+<br>
+Tela Final (Frontend). O usuário pode escolher a quantidade que vai converter quando a moeda base e alvo.
 
 
