@@ -27,4 +27,6 @@ Requisição a Api de conversão de moedas com o parâmetro da moeda base
 <br>
 Tela Final (Frontend). O usuário pode escolher a quantidade que vai converter quando a moeda base e alvo.
 
+<hr>
+
 
